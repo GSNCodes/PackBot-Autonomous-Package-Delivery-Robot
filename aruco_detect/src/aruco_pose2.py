@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
+from std_msgs.msg import Float64MultiArray
 import rospy
 
 global size_of_marker 
@@ -19,6 +20,8 @@ global dist
 
 bridge = CvBridge()
 img_pub = rospy.Publisher('/usb_cam/image_aruco',Image, queue_size=1)
+
+tvec_pub = rospy.Publisher('t_vecs', Float64MultiArray, queue_size=10)
 #transform_pub = rospy.Publisher('/',,qu)
 
 # all tags supported by cv2
@@ -171,6 +174,16 @@ def image_callback(msg:Image):
     
     # show the output frame
     #cv2.imshow("Frame", frame)
+    t_vecs_msg = Float64MultiArray()
+    msg = []
+    for t in t_vecs:
+        vec = []
+        for x in t:
+            vec.append(x)
+        msg.append(vec)
+    t_vecs_msg.data = msg
+    tvec_pub.publish(t_vecs_msg)
+
     imgMsg = bridge.cv2_to_imgmsg(frame, encoding = 'bgr8')
     img_pub.publish(imgMsg)
     key = cv2.waitKey(1) & 0xFF
