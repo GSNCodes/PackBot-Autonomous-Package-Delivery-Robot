@@ -131,9 +131,16 @@ def detectFromStream(size_of_marker, mtx, dist):
         # detect ArUco markers in the input frame
         (corners, ids, rejected) = cv2.aruco.detectMarkers(frame, arucoDict, parameters=arucoParams)
         rvecs,tvecs,_ = cv2.aruco.estimatePoseSingleMarkers(corners, size_of_marker , mtx, dist)
+        print("HERE")
         if tvecs is not None:
-            print("HERE")
-            print(tvecs[0])
+            msg = []
+            for t in tvecs:
+                vec = []
+                for x in t:
+                    for val in x:
+                        vec.append(val)
+                msg.append(vec)
+            print(msg)
             # verify *at least* one ArUco marker was detected
         if len(corners) > 0:
             # flatten the ArUco IDs list

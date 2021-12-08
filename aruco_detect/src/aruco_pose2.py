@@ -175,12 +175,15 @@ def image_callback(msg:Image):
     # show the output frame
     #cv2.imshow("Frame", frame)
     t_vecs_msg = Float64MultiArray()
-    msg = []
-    for t in t_vecs:
-        vec = []
-        for x in t:
-            vec.append(x)
-        msg.append(vec)
+
+    if tvecs is not None:
+        msg = []
+        for t in tvecs:
+            vec = []
+            for x in t:
+                for val in x:
+                    vec.append(val)
+            msg.append(vec)
     t_vecs_msg.data = msg
     tvec_pub.publish(t_vecs_msg)
 
