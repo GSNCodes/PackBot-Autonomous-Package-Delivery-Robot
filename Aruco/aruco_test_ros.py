@@ -117,14 +117,14 @@ def calibrate_camera(allCorners,allIds,imsize):
     return ret, camera_matrix, distortion_coefficients0, rotation_vectors, translation_vectors
 
 def detectFromStream(size_of_marker, mtx, dist):
-    vs = VideoStream(src=0).start()
+    #vs = VideoStream(src=0).start()
     time.sleep(2.0)
 
     # loop over the frames from the video stream
     while True:
         # grab the frame from the threaded video stream and resize it
         # to have a maximum width of 1000 pixels
-        frame = vs.read()
+        frame = /usb_cam/image_raw
         #frame = imutils.resize(frame, width=1000)
         # plt.imshow(frame)
         # plt.show()
@@ -188,11 +188,11 @@ def detectFromStream(size_of_marker, mtx, dist):
             break
     # do a bit of cleanup
     cv2.destroyAllWindows()
-    vs.stop()
+    #vs.stop()
 
 if __name__ == "__main__":
     #detectFromStream()
-    imagesFolder = "./images/"
+    imagesFolder = "./images2/"
     images = [imagesFolder + f for f in os.listdir(imagesFolder) if f.startswith("img_")]
 
     allCorners, allIds, imsize = read_chessboards(images)
