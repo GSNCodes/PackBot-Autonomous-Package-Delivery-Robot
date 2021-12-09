@@ -13,6 +13,8 @@ from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image
 from std_msgs.msg import Float64MultiArray
 import rospy
+import actionlib
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 global size_of_marker 
 global mtx
@@ -182,12 +184,25 @@ def image_callback(msg:Image):
 
 
     if tvecs is not None:
-        #print(tvecs)
+
+        # Remove the redundant dimension, for example 8x1x3 --> 8x3
         temp_vec = np.reshape(tvecs,(tvecs.shape[0],tvecs.shape[2]))
+
+        # Get an array of all block distances
         temp_vec_norm = np.linalg.norm(temp_vec,axis = 1)
 
+        # Find index of closest aruco and match with its ID
         closest_id = ids[np.argmin(temp_vec_norm)]
-        print("The closest id is: ",closest_id)
+
+        #print("The closest id is: ",closest_id, " and is ", np.min(temp_vec_norm), " cm away")
+        closest_tvec = temp_vec[np.argmin(temp_vec_norm)]
+
+        #Convert into ROS form: [x y z] --> [z -x y]
+        ROS_closest_tvec = np.array([closest_tvec[2], -closest_tvec[0], closest_tvec[1]])/100
+        ROS_closest_tvec_rounded = np.round(ROS_closest_tvec, decimals=2)
+
+        print("Closest ID: ", closest_id, ", Goal pose in ROS: ", ROS_closest_tvec_rounded)
+
         msg = []
         for t in tvecs:
             vec = []
@@ -195,15 +210,36 @@ def image_callback(msg:Image):
                 for val in x:
                     vec.append(val)
             msg.append(vec)
-        #print(len(msg))
+        
         t_vecs_msg.data = msg
         tvec_pub.publish(t_vecs_msg)
-        #print(type(t_vecs_msg))
+        
+        movebase_client(ROS_closest_tvec_rounded[0], ROS_closest_tvec_rounded[1])
 
     imgMsg = bridge.cv2_to_imgmsg(frame, encoding = 'bgr8')
     img_pub.publish(imgMsg)
     key = cv2.waitKey(1) & 0xFF
     #time.sleep(.1)
+
+def movebase_client(x,y):
+
+    client = actionlib.SimpleActionClient('move_base',MoveBaseAction)
+    client.wait_for_server()
+
+    goal = MoveBaseGoal()
+    goal.target_pose.header.frame_id = "map"
+    goal.target_pose.header.stamp = rospy.Time.now()
+    goal.target_pose.pose.position.x = x
+    goal.target_pose.pose.position.y = y
+    goal.target_pose.pose.orientation.w = 1.0
+
+    client.send_goal(goal)
+    wait = client.wait_for_result()
+    if not wait:
+        rospy.logerr("Action server not available!")
+        rospy.signal_shutdown("Action server not available!")
+    else:
+        return client.get_result()
 
 
 
@@ -220,6 +256,7 @@ if __name__ == "__main__":
 
     #np.save("/home/bharath/catkin_ws/src/aruco_detect/src/mtx.npy", mtx)
     #np.save("/home/bharath/catkin_ws/src/aruco_detect/src/dist.npy", dist)
+    
     size_of_marker = 2.8
     main()
 
