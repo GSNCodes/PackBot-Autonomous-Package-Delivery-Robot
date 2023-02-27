@@ -1,4 +1,4 @@
-![](PackBot_Run.mp4)
+https://user-images.githubusercontent.com/20588623/221689471-ae83cba7-4e35-40a6-9141-d6337fea42c7.mp4
 
 # CSCI-5551-PackBot
 
