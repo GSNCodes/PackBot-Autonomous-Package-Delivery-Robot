@@ -1,3 +1,5 @@
+![](PackBot_Run.mp4)
+
 # CSCI-5551-PackBot
 
 ## About
