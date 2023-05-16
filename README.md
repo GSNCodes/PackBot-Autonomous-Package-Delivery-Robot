@@ -37,4 +37,4 @@ pick-up location to their respective drop-off points within a maze. We simulate 
 - Each of these locations would have ArUCo markers on the walls.
 - Follow the `README.md` provided within `aruco_detect` to initialize the all the required nodes.
 
-For more details regarding the inner workings, refer to the `PackBot_Report.pdf`
+For more details regarding the inner workings, refer to `PackBot_Report.pdf`
