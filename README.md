@@ -3,7 +3,7 @@
 ## About
 
 This repo contains the code for our final project for CSCI-5551: Introduction to Intelligent Robotic Systems.  
-The contributors are Bharath Sivaram , Quinn Koenig, and Sowmiya Govindaraj
+The contributors are [Bharath Sivaram](https://github.com/bharathsivaram10) , [Quinn Koenig](https://github.com/QKoenig), and [Sowmiya Narayanan Govindaraj](https://github.com/GSNCodes)
 
 <https://user-images.githubusercontent.com/20588623/221689471-ae83cba7-4e35-40a6-9141-d6337fea42c7.mp4>
 
