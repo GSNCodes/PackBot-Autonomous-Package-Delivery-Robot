@@ -1,4 +1,4 @@
-# PackBot: Autonomous-Package-Delivery-Robot 
+# PackBot: Autonomous Package Delivery Robot 
 
 ## About
 
