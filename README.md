@@ -1,4 +1,4 @@
-# CSCI-5551-PackBot
+# PackBot: Autonomous-Package-Delivery-Robot 
 
 ## About
 
